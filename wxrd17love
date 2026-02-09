@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.wxrdd - Love</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #ff0000;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            white-space: pre-wrap; /* Fondamentale per vedere i testi ASCII */
+        }
+        #terminal {
+            text-align: center;
+            line-height: 1.1;
+            font-size: 1.2vw; /* Si adatta allo schermo */
+        }
+        .pink { color: #ff00ff; font-weight: bold; }
+        .white { color: #ffffff; font-weight: bold; }
+        .red { color: #ff0000; }
+    </style>
+</head>
+<body>
+    <div id="terminal">Caricamento...</div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+
+        // Firma corretta (più semplice per evitare bug di visualizzazione)
+        const firmaAscii = `
+    .wxrdd
+    _________________
+        `;
+
+        const loveAscii = `
+   ___   __    ____ _  __ ____   __  __ ____  __  __
+  /  _/ / /   / __ \\| |/ // __/  \\ \\/ // __ \\/ / / /
+ _/ /  / /__ / /_/ /|   // _/     \\  // /_/ / /_/ / 
+/___/ /____/ \\____/ |__/ /___/    /_/ \\____/\\____/  
+        `;
+
+        const cuoreBig = [
+            "      ##########          ##########      ",
+            "    ##############      ##############    ",
+            "  ##################  ##################  ",
+            " ######################################## ",
+            " ######################################## ",
+            " ######################################## ",
+            "  ######################################  ",
+            "    ##################################    ",
+            "      ##############################      ",
+            "        ##########################        ",
+            "          ######################          ",
+            "            ##################            ",
+            "              ##############              ",
+            "                ##########                ",
+            "                  ######                  ",
+            "                    ##                    "
+        ];
+
+        const cuoreSmall = [
+            "\n",
+            "          ######      ######              ",
+            "        ##########  ##########            ",
+            "       ########################           ",
+            "       ########################           ",
+            "        ######################            ",
+            "          ##################              ",
+            "            ##############                ",
+            "              ##########                  ",
+            "                ######                    ",
+            "                  ##                      ",
+            "\n\n\n\n\n"
+        ];
+
+        async function startAnimation() {
+            // 1. Mostra Firma Pink
+            terminal.innerHTML = `<span class="pink">${firmaAscii}</span>`;
+            await new Promise(r => setTimeout(r, 2500));
+
+            // 2. Animazione Battito
+            let count = 0;
+            const totalBeats = 20;
+            
+            const interval = setInterval(() => {
+                let frame = "";
+                const isBig = count % 2 === 0;
+                const disegno = isBig ? cuoreBig : cuoreSmall;
+
+                disegno.forEach((riga, index) => {
+                    if (isBig && index === 7) {
+                        const testo = "  I LOVE YOU  ";
+                        const meta = Math.floor(riga.length / 2);
+                        const metaT = Math.floor(testo.length / 2);
+                        const parteSx = riga.substring(0, meta - metaT);
+                        const parteDx = riga.substring(meta + metaT);
+                        frame += `<span class="red">${parteSx}</span><span class="white">${testo}</span><span class="red">${parteDx}</span>\n`;
+                    } else {
+                        frame += `<span class="red">${riga}</span>\n`;
+                    }
+                });
+
+                terminal.innerHTML = frame;
+                count++;
+                
+                if (count >= totalBeats) {
+                    clearInterval(interval);
+                    showFinal();
+                }
+            }, 450);
+        }
+
+        function showFinal() {
+            terminal.innerHTML = `<span class="red">${loveAscii}</span>`;
+        }
+
+        startAnimation();
+    </script>
+</body>
+</html>
