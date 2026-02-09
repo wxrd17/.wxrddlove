@@ -10,31 +10,40 @@
             color: #ff0000;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            white-space: pre;
-        }
-        #terminal {
-            text-align: left;
-            /* Font responsivo: più grande su schermi piccoli */
-            font-size: 2.5vw; 
-            line-height: 1.2;
         }
         
-        /* Ottimizzazione specifica per il telefono (schermi stretti) */
-        @media screen and (max-width: 600px) {
-            #terminal {
-                font-size: 3.2vw; /* Ancora più grande sul cellulare */
-                line-height: 1.1;
-            }
+        #terminal {
+            white-space: pre;
+            /* Questo comando assicura che il testo non diventi minuscolo */
+            font-size: 2.8vw; 
+            line-height: 1.1;
+            text-align: center;
         }
 
-        .pink { color: #ff00ff; font-weight: bold; }
+        /* Testo semplice per la firma così non si rompe mai */
+        .pink-title {
+            color: #ff00ff;
+            font-size: 8vw;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+
         .white { color: #ffffff; font-weight: bold; }
         .red { color: #ff0000; }
+
+        /* Media query per telefoni piccoli */
+        @media screen and (max-width: 480px) {
+            #terminal {
+                font-size: 3.5vw; /* Ancora più grande se lo schermo è piccolo */
+            }
+        }
     </style>
 </head>
 <body>
@@ -43,59 +52,37 @@
     <script>
         const terminal = document.getElementById('terminal');
 
-        const firmaSlant = `
-    _  _  _                     _    _ 
-  _| || |_| | _ _ _ _ _ ___ ___| |_| |
- |_     _| | | | | | | |  _| . | . | |
-  _|_||_|_| |_____|_____|_| |___|___|_|
-           |_|                         
-        `;
-
-        const loveSlant = `
-    ____   __    ____ _  __ ____   __  __ ____  __  __
-   /  _/ / /   / __ \\| |/ // __/  \\ \\/ // __ \\/ / / /
-  _/ /  / /__ / /_/ /|   // _/     \\  // /_/ / /_/ / 
- /___/ /____/ \\____/ |__/ /___/    /_/ \\____/\\____/  
-        `;
-
         const cuoreBig = [
-            "      ##########          ##########      ",
-            "    ##############      ##############    ",
-            "  ##################  ##################  ",
-            " ######################################## ",
-            " ######################################## ",
-            " ######################################## ",
-            "  ######################################  ",
-            "    ##################################    ",
-            "      ##############################      ",
-            "        ##########################        ",
-            "          ######################          ",
-            "            ##################            ",
-            "              ##############              ",
-            "                ##########                ",
-            "                  ######                  ",
-            "                    ##                    "
+            "  ######      ######  ",
+            "##########  ##########",
+            "######################",
+            "######################",
+            " #################### ",
+            "  ##################  ",
+            "    ##############    ",
+            "      ##########      ",
+            "        ######        ",
+            "          ##          "
         ];
 
         const cuoreSmall = [
             "\n",
-            "          ######      ######              ",
-            "        ##########  ##########            ",
-            "       ########################           ",
-            "       ########################           ",
-            "        ######################            ",
-            "          ##################              ",
-            "            ##############                ",
-            "              ##########                  ",
-            "                ######                    ",
-            "                  ##                      ",
-            "\n\n\n\n\n"
+            "    ####      ####    ",
+            "  ########  ########  ",
+            "  ################    ",
+            "    ############      ",
+            "      ########        ",
+            "        ####          ",
+            "          ##          ",
+            "\n"
         ];
 
         async function startAnimation() {
-            terminal.innerHTML = `<span class="pink">${firmaSlant}</span>`;
-            await new Promise(r => setTimeout(r, 2500));
+            // 1. Firma pulita e leggibile
+            terminal.innerHTML = `<div class="pink-title">.wxrdd</div>`;
+            await new Promise(r => setTimeout(r, 2000));
 
+            // 2. Animazione Battito
             let count = 0;
             const totalBeats = 20;
             
@@ -103,21 +90,18 @@
                 let frame = "";
                 const isBig = count % 2 === 0;
                 const disegno = isBig ? cuoreBig : cuoreSmall;
-                
-                // Indentazione ridotta per il telefono
-                const indent = isBig ? "  " : "      ";
 
-                frame += "\n\n";
+                frame += "\n";
                 disegno.forEach((riga, index) => {
-                    if (isBig && index === 7) {
-                        const testo = "  I LOVE YOU  ";
+                    if (isBig && index === 2) {
+                        const testo = " I LOVE YOU ";
                         const meta = Math.floor(riga.length / 2);
                         const metaT = Math.floor(testo.length / 2);
                         const parteSx = riga.substring(0, meta - metaT);
                         const parteDx = riga.substring(meta + metaT);
-                        frame += indent + `<span class="red">${parteSx}</span><span class="white">${testo}</span><span class="red">${parteDx}</span>\n`;
+                        frame += `<span class="red">${parteSx}</span><span class="white">${testo}</span><span class="red">${parteDx}</span>\n`;
                     } else {
-                        frame += indent + `<span class="red">${riga}</span>\n`;
+                        frame += `<span class="red">${riga}</span>\n`;
                     }
                 });
 
@@ -128,11 +112,11 @@
                     clearInterval(interval);
                     showFinal();
                 }
-            }, 450);
+            }, 400);
         }
 
         function showFinal() {
-            terminal.innerHTML = `<span class="red">${loveSlant}</span>`;
+            terminal.innerHTML = `<div class="red" style="font-size: 10vw; font-weight: bold;">I LOVE YOU</div>`;
         }
 
         startAnimation();
